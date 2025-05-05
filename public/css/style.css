@@ -1,0 +1,11 @@
+#welcome-text {
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    font-style: italic;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.fade-in {
+    opacity: 1;
+}
