@@ -13,11 +13,21 @@
         <input type="submit" value="Send">
     </form>
     <div id="response">
-        </div>
-    <div id="finishing-dashboard" style="display:none;">
+        {% if response %}
+            <p>Bot: {{ response }}</p>
+        {% endif %}
+    </div>
+    {% if show_dashboard %}
+    <div id="finishing-dashboard">
         <h2>Thank you!</h2>
         <p id="romantic-message">
-            </p>
+            💖 Our hearts hope you find connection and joy again. 💖
+        </p>
     </div>
+    {% endif %}
+
+    <script>
+        // We can add JavaScript here for more dynamic behavior, like the welcome animation
+    </script>
 </body>
 </html>
