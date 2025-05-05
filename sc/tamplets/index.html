@@ -2,11 +2,24 @@
 <html>
 <head>
     <title>Relationship Bot</title>
+    <style>
+        #welcome-text {
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            font-style: italic;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .fade-in {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to the Relationship Bot</h1>
     <div id="welcome-animation">
-        </div>
+        <p id="welcome-text">My dearest friend, welcome! Step into a space where matters of the heart are met with understanding and care.</p>
+    </div>
     <p>How may I help you with your relationship today?</p>
     <form method="POST" action="/">
         <textarea name="query" rows="5" cols="50"></textarea><br><br>
@@ -27,7 +40,10 @@
     {% endif %}
 
     <script>
-        // We can add JavaScript here for more dynamic behavior, like the welcome animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeText = document.getElementById('welcome-text');
+            welcomeText.classList.add('fade-in');
+        });
     </script>
 </body>
 </html>
