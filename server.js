@@ -1,15 +1,33 @@
 const express = require('express');
 const path = require('path');
+const OpenAI = require('openai'); // Import the OpenAI library
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Initialize OpenAI with your API key
+const openai = new OpenAI({ apiKey: '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' });
+
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(express.json());
 
 let warningCount = 0;
 const WARNING_THRESHOLD = 3;
 
 function isRelationshipRelated(text) {
+    if (!text || typeof text !== 'string') {
+        return false;
+    }
+    const trimmedText = text.toLowerCase().trim();
+    if (!trimmedText) {
+        return false;
+    }
+
+    const keywords = ["relationship", "love", "partner", "friend", "family", "communication",
+                      "conflict", "feeling", "connected", "expectations", "breakup", "dating",
+                      "marriage", "intimacy", "trust", "jealousy", "insecurity", "forgiveness",
+                      "support", "attachment", "co-parenting", "infidelity", "quote"];
+
     const relatedPhrases = [
         "about my relationship",
         "in my relationship",
@@ -32,36 +50,48 @@ function isRelationshipRelated(text) {
         "exploring my feelings about",
         "navigating expectations in"
     ];
-    text = text.toLowerCase();
-    for (const phrase of relatedPhrases) {
-        if (text.includes(phrase)) {
+
+    for (const keyword of keywords) {
+        if (trimmedText.includes(keyword)) {
             return true;
         }
     }
+
+    for (const phrase of relatedPhrases) {
+        if (trimmedText.includes(phrase)) {
+            return true;
+        }
+    }
+
     return false;
 }
-function handleRelationshipQuery(query) {
-    const encouragingMessages = [
-        "It takes courage to explore matters of the heart. You're on the right path.",
-        "Every relationship has its ups and downs. Keep nurturing the connection.",
-        "Understanding and communication are key. You're thinking about important things.",
-        "Relationships thrive on effort and care. Your thoughtfulness is valuable.",
-        "Remember to be kind to yourself and your partner as you navigate this.",
-        "Reflecting on relationship quotes can offer valuable insights. Keep exploring!",
-        "Every quote holds a lesson. Consider how it applies to your situation.",
-        "In the realm of relationships, understanding is a continuous journey.",
-        "Quotes can inspire reflection and growth in our connections with others.",
-        "Take the time to truly understand the message behind the quote."
-    ];
-    const randomIndex = Math.floor(Math.random() * encouragingMessages.length);
-    return encouragingMessages[randomIndex];
+
+async function handleRelationshipQuery(query) {
+    try {
+        const completion = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo", // You can experiment with other models like "gpt-4"
+            messages: [
+                { role: "system", content: "You are a helpful and empathetic relationship advisor. Please provide thoughtful and encouraging responses to the user's input." },
+                { role: "user", content: query },
+            ],
+        });
+
+        if (completion.choices && completion.choices.length > 0) {
+            return completion.choices[0].message.content;
+        } else {
+            return "I'm sorry, I couldn't generate a helpful response at this time.";
+        }
+    } catch (error) {
+        console.error("Error calling OpenAI:", error);
+        return "There was an error communicating with the AI. Please try again later.";
+    }
 }
 
-app.post('/api/query', (req, res) => {
+app.post('/api/query', async (req, res) => { // Make the route handler async
     const userQuery = req.body.query;
     if (isRelationshipRelated(userQuery)) {
-        const response = handleRelationshipQuery(userQuery);
-        warningCount = 0; // Reset warnings
+        const response = await handleRelationshipQuery(userQuery); // Await the AI's response
+        warningCount = 0;
         res.json({ response, showDashboard: false });
     } else {
         warningCount++;
@@ -70,7 +100,7 @@ app.post('/api/query', (req, res) => {
         if (warningCount >= WARNING_THRESHOLD) {
             response = "You have exceeded the warning limit. The session is now ending.";
             showDashboard = true;
-            warningCount = 0; // Reset warning count after ending
+            warningCount = 0;
         }
         res.json({ response, showDashboard });
     }
