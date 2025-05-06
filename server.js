@@ -13,7 +13,7 @@ function isRelationshipRelated(text) {
     const keywords = ["relationship", "love", "partner", "friend", "family", "communication",
                       "conflict", "feeling", "connected", "expectations", "breakup", "dating",
                       "marriage", "intimacy", "trust", "jealousy", "insecurity", "forgiveness",
-                      "support", "attachment", "co-parenting", "infidelity"];
+                      "support", "attachment", "co-parenting", "infidelity", "quote"]; // Added "quote" as a keyword
     text = text.toLowerCase();
     for (const keyword of keywords) {
         if (text.includes(keyword)) {
@@ -24,8 +24,20 @@ function isRelationshipRelated(text) {
 }
 
 function handleRelationshipQuery(query) {
-    return `Thank you for sharing. We are processing your relationship inquiry: '${query}'`;
-    // In the future, this function will generate charts based on the query.
+    const encouragingMessages = [
+        "It takes courage to explore matters of the heart. You're on the right path.",
+        "Every relationship has its ups and downs. Keep nurturing the connection.",
+        "Understanding and communication are key. You're thinking about important things.",
+        "Relationships thrive on effort and care. Your thoughtfulness is valuable.",
+        "Remember to be kind to yourself and your partner as you navigate this.",
+        "Reflecting on relationship quotes can offer valuable insights. Keep exploring!",
+        "Every quote holds a lesson. Consider how it applies to your situation.",
+        "In the realm of relationships, understanding is a continuous journey.",
+        "Quotes can inspire reflection and growth in our connections with others.",
+        "Take the time to truly understand the message behind the quote."
+    ];
+    const randomIndex = Math.floor(Math.random() * encouragingMessages.length);
+    return encouragingMessages[randomIndex];
 }
 
 app.post('/api/query', (req, res) => {
