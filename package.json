@@ -1,7 +1,15 @@
-
-"dependencies": {
-  "express": "^4.18.2" 
-}
-"scripts": {
-  "start": "node server.js"
+{
+  "name": "relationship-bot-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
