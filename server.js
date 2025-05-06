@@ -10,19 +10,36 @@ let warningCount = 0;
 const WARNING_THRESHOLD = 3;
 
 function isRelationshipRelated(text) {
-    const keywords = ["relationship", "love", "partner", "friend", "family", "communication",
-                      "conflict", "feeling", "connected", "expectations", "breakup", "dating",
-                      "marriage", "intimacy", "trust", "jealousy", "insecurity", "forgiveness",
-                      "support", "attachment", "co-parenting", "infidelity", "quote"]; // Added "quote" as a keyword
+    const relatedPhrases = [
+        "about my relationship",
+        "in my relationship",
+        "my partner",
+        "my friend",
+        "my family",
+        "communication issues",
+        "dealing with conflict",
+        "feeling disconnected",
+        "relationship advice",
+        "a relationship quote",
+        "love quote",
+        "marriage advice",
+        "dating tips",
+        "breakup advice",
+        "how to connect with",
+        "problems with my",
+        "advice on my",
+        "thoughts on relationships",
+        "exploring my feelings about",
+        "navigating expectations in"
+    ];
     text = text.toLowerCase();
-    for (const keyword of keywords) {
-        if (text.includes(keyword)) {
+    for (const phrase of relatedPhrases) {
+        if (text.includes(phrase)) {
             return true;
         }
     }
     return false;
 }
-
 function handleRelationshipQuery(query) {
     const encouragingMessages = [
         "It takes courage to explore matters of the heart. You're on the right path.",
