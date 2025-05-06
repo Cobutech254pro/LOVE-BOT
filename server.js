@@ -71,7 +71,7 @@ async function handleRelationshipQuery(query) {
         const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo", // You can experiment with other models like "gpt-4"
             messages: [
-                { role: "system", content: "You are a helpful and empathetic relationship advisor. Please provide thoughtful and encouraging responses to the user's input." },
+                { role: "system", content: "You are an advanced and empathetic relationship advisor, similar to ChatGPT. You provide thoughtful, detailed, and insightful responses to the user's relationship-related questions and quotes. You can ask clarifying questions if needed and maintain a helpful and engaging conversation." },
                 { role: "user", content: query },
             ],
         });
